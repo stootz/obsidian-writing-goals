@@ -75,10 +75,20 @@ export class GoalHelper {
 
     private getGoalTitle(fileOrFolder: TAbstractFile) {
         if (fileOrFolder instanceof TFile) {
+            return this.removeFinalExtension(fileOrFolder.name);
             return fileOrFolder.basename ?? fileOrFolder.name;
         }
 
         return fileOrFolder.name;
+    }
+
+    private removeFinalExtension(name: string) {
+        const lastDotIndex = name.lastIndexOf(".");
+        if (lastDotIndex > 0) {
+            return name.substring(0, lastDotIndex);
+        }
+
+        return name;
     }
 
     getGoalCount(frontMatterKey: string, file: TAbstractFile) {
@@ -155,6 +165,11 @@ export class GoalHelper {
     }
 
     private isValidFile(fileOrFolder: TAbstractFile) {
+        return fileOrFolder instanceof TFile && (fileOrFolder.extension == "md" || this.additionalFileTypes(fileOrFolder));
+    }
+
+    private additionalFileTypes(file: TFile) {
+        return this.settings.additionalFileTypes?.includes?.(file.extension) ?? false;
         return fileOrFolder instanceof TFile && (fileOrFolder.extension == "md" || this.additionalFileTypes(fileOrFolder));
     }
 

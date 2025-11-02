@@ -63,6 +63,7 @@ export default class StatsDetaillView extends ItemView {
     getTitle = (path: string) => {
         const fileOrFolder = this.app.vault.getAbstractFileByPath(path);
         if (fileOrFolder instanceof TFile) {
+            return this.removeFinalExtension(fileOrFolder.name);
             return fileOrFolder.basename ?? this.fallbackTitle(path);
         }
         if (fileOrFolder != null) {
@@ -74,6 +75,16 @@ export default class StatsDetaillView extends ItemView {
     private fallbackTitle(path: string) {
         const segments = path?.split("/") ?? [];
         const name = segments[segments.length - 1] ?? path;
+        return this.removeFinalExtension(name);
+    }
+
+    private removeFinalExtension(name: string) {
+        const lastDotIndex = name.lastIndexOf(".");
+        if (lastDotIndex > 0) {
+            return name.substring(0, lastDotIndex);
+        }
+
+        return name;
         return name.replace(/\.[^/.]+$/, "");
     }
 

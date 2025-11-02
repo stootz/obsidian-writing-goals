@@ -27,6 +27,7 @@
 
         const unsubNoteGoals = noteGoals.subscribe((val) => {
                 goals = val;
+                keys = Object.keys(goals).sort((a, b) => getTitle(a).localeCompare(getTitle(b)));
                 keys = Object.keys(goals).sort((a, b) => goalTitle(a).localeCompare(goalTitle(b)));
         });
 
