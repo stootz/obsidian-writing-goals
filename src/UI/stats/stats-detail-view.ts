@@ -60,6 +60,23 @@ export default class StatsDetaillView extends ItemView {
         }
     }
 
+    getTitle = (path: string) => {
+        const fileOrFolder = this.app.vault.getAbstractFileByPath(path);
+        if (fileOrFolder instanceof TFile) {
+            return fileOrFolder.basename ?? this.fallbackTitle(path);
+        }
+        if (fileOrFolder != null) {
+            return fileOrFolder.name ?? this.fallbackTitle(path);
+        }
+        return this.fallbackTitle(path);
+    }
+
+    private fallbackTitle(path: string) {
+        const segments = path?.split("/") ?? [];
+        const name = segments[segments.length - 1] ?? path;
+        return name.replace(/\.[^/.]+$/, "");
+    }
+
     async setStats() {
         const goalHistory = await this.historyHelper.loadHistory();
         const linkedChartData = await this.historyHelper.transformHistory(goalHistory);
@@ -79,7 +96,8 @@ export default class StatsDetaillView extends ItemView {
                 chartData: linkedChartData,
                 onHistoryUpdate: onHistoryUpdate,
                 onGoalClick: onGoalClick,
-                onTitleClick: onTitleClick
+                onTitleClick: onTitleClick,
+                getTitle: this.getTitle
             }
         });
     }

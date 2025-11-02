@@ -73,8 +73,9 @@ Obsidian's API does not provide contractual access to the File Explorer pane, so
 Follow these steps to get the code running in a local environment:
 
 1. Once you have cloned the repo, run `npm install` in the root folder. All required dependencies and dev dependencies should be installed.
-2. Run `npm run dev` to build and copy `main.js`, `style.css` and `manifest.json` to a test-vault folder. The command will continue to run, listening for file changes (except for style.css).
-3. Open Obsdian and load the test-vault folder as a vault.
+2. Run `npm run dev` to build and copy `main.js`, `styles.css` and `manifest.json` to a test-vault folder. The command will continue to run, listening for file changes (except for styles.css).
+   - If you edit `styles.css` directly, stop and restart the dev server or copy the file manually into the test vault so Obsidian sees the update.
+3. Open Obsidian and load the test-vault folder as a vault.
 
 You should now be able to make changes to the code and debug within Obsidian.
 
