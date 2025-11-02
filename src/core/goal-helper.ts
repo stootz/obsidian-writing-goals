@@ -76,6 +76,7 @@ export class GoalHelper {
     private getGoalTitle(fileOrFolder: TAbstractFile) {
         if (fileOrFolder instanceof TFile) {
             return this.removeFinalExtension(fileOrFolder.name);
+            return fileOrFolder.basename ?? fileOrFolder.name;
         }
 
         return fileOrFolder.name;
@@ -169,5 +170,10 @@ export class GoalHelper {
 
     private additionalFileTypes(file: TFile) {
         return this.settings.additionalFileTypes?.includes?.(file.extension) ?? false;
+        return fileOrFolder instanceof TFile && (fileOrFolder.extension == "md" || this.additionalFileTypes(fileOrFolder));
+    }
+
+    private additionalFileTypes(file: TFile) {
+        return this.settings.additionalFileTypes?.contains(file.extension) ?? false;
     }
 }

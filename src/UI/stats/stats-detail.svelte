@@ -28,6 +28,7 @@
         const unsubNoteGoals = noteGoals.subscribe((val) => {
                 goals = val;
                 keys = Object.keys(goals).sort((a, b) => getTitle(a).localeCompare(getTitle(b)));
+                keys = Object.keys(goals).sort((a, b) => goalTitle(a).localeCompare(goalTitle(b)));
         });
 
 	const unsubHistory = goalHistory.subscribe((val) => {
@@ -49,6 +50,11 @@
         }
 
         function goalTitle(path: string) {
+                const goal = goals?.[path];
+                const title = goal?.title;
+                if (title && title.length > 0) {
+                        return title;
+                }
                 return getTitle(path);
         }
 </script>
