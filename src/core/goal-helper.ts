@@ -74,7 +74,20 @@ export class GoalHelper {
     }
 
     private getGoalTitle(fileOrFolder: TAbstractFile) {
-        return fileOrFolder.name.split(".")[0]
+        if (fileOrFolder instanceof TFile) {
+            return this.removeFinalExtension(fileOrFolder.name);
+        }
+
+        return fileOrFolder.name;
+    }
+
+    private removeFinalExtension(name: string) {
+        const lastDotIndex = name.lastIndexOf(".");
+        if (lastDotIndex > 0) {
+            return name.substring(0, lastDotIndex);
+        }
+
+        return name;
     }
 
     getGoalCount(frontMatterKey: string, file: TAbstractFile) {
@@ -155,6 +168,6 @@ export class GoalHelper {
     }
 
     private additionalFileTypes(file: TFile) {
-        return this.settings.additionalFileTypes.contains(file.extension);
+        return this.settings.additionalFileTypes?.includes?.(file.extension) ?? false;
     }
 }

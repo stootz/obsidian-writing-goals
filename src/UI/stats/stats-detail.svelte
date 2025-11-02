@@ -12,9 +12,10 @@
 
 	export let chartData: HistoryStatsItems;
 	export let colors: WritingGoalColors;
-	export let onHistoryUpdate: (val: GoalHistory) => HistoryStatsItems;
-	export let onGoalClick: (path: string) => void;
-	export let onTitleClick: (path: string) => void;
+        export let onHistoryUpdate: (val: GoalHistory) => HistoryStatsItems;
+        export let onGoalClick: (path: string) => void;
+        export let onTitleClick: (path: string) => void;
+        export let getTitle: (path: string) => string;
 
 	let goals: WritingGoals;
 	let keys: string[];
@@ -24,10 +25,10 @@
 		goalColors = colors;
 	});
 
-	const unsubNoteGoals = noteGoals.subscribe((val) => {
-		goals = val;
-		keys = Object.keys(goals).sort((a, b) => goals[a].title.localeCompare(goals[b].title));
-	});
+        const unsubNoteGoals = noteGoals.subscribe((val) => {
+                goals = val;
+                keys = Object.keys(goals).sort((a, b) => getTitle(a).localeCompare(getTitle(b)));
+        });
 
 	const unsubHistory = goalHistory.subscribe((val) => {
 		if (val) {
@@ -43,9 +44,13 @@
 	onDestroy(unsubHistory);
 	onDestroy(unsubColors);
 
-	function transform(stats: HistoryStatsItem[]) {
-		return stats ? Object.fromEntries(stats.map((s) => [s.date, s.value])) : {};
-	}
+        function transform(stats: HistoryStatsItem[]) {
+                return stats ? Object.fromEntries(stats.map((s) => [s.date, s.value])) : {};
+        }
+
+        function goalTitle(path: string) {
+                return getTitle(path);
+        }
 </script>
 
 {#if keys.length > 0}
@@ -57,7 +62,7 @@
 					<div class="stats-detail-title">
 						<!-- svelte-ignore a11y-click-events-have-key-events -->
 						<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-						<h3 on:click={onTitleClick(key)}>{goals[key].title}</h3>
+                                                <h3 on:click={() => onTitleClick(key)}>{goalTitle(key)}</h3>
 
 						<div class="linked-chart-date-label">
 							<LinkedLabel linked="link-stats-details-1" />
